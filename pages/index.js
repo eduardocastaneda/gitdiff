@@ -8,9 +8,11 @@ function HomePage({ developmentCommits }) {
       message = message.split("*")[0];
     }
 
+    const author = data.author ? data.author.login : data.commit.author.name;
+
     return {
       message,
-      author: data.author.login,
+      author,
       date: formatDate(data.commit.author.date),
       key: data.commit.author.date
     };
@@ -69,7 +71,6 @@ function HomePage({ developmentCommits }) {
 HomePage.getInitialProps = async () => {
   const masterCommits = await fetchCommits(process.env.MASTER_BRANCH);
   const latestCommitDate = findLatestDate(masterCommits);
-
   const sinceDate = addSecond(latestCommitDate);
   const developmentCommits = await fetchCommits(
     process.env.DEVELOP_BRANCH,
